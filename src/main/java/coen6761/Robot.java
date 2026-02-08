@@ -82,26 +82,26 @@ public class Robot {
     }
 
     public void paint() {
+        if (floor == null) {
+            throw new IllegalStateException("Robot not initialized");
+        }
 
         int indexWidth = String.valueOf(floorSize - 1).length();
+        String rowFormat = "%" + indexWidth + "d ";
+
         for (int r = floorSize - 1; r >= 0; r--) {
-            String label = String.valueOf(r);
-            System.out.print(label);
-            System.out.print(" ".repeat(indexWidth - label.length() + 1));
+            System.out.printf(rowFormat, r);
             for (int c = 0; c < floorSize; c++) {
                 char mark = (floor[r][c] == 1) ? '*' : ' ';
-                System.out.print(mark);
-                System.out.print(" ".repeat(indexWidth));
-                System.out.print(" ");
+                System.out.print(mark + " ");
             }
             System.out.println();
         }
 
         System.out.print(" ".repeat(indexWidth + 1));
+        String colFormat = "%" + indexWidth + "d ";
         for (int c = 0; c < floorSize; c++) {
-            String label = String.valueOf(c);
-            System.out.print(label);
-            System.out.print(" ".repeat(indexWidth - label.length() + 1));
+            System.out.printf(colFormat, c);
         }
         System.out.println();
     }
@@ -132,6 +132,10 @@ public class Robot {
         int targetCol = col + (dCol * n);
         if (targetRow < 0 || targetRow >= floorSize || targetCol < 0 || targetCol >= floorSize) {
             throw new IllegalArgumentException("Move would go out of bounds");
+        }
+
+        if (penDown) {
+            floor[row][col] = 1;
         }
 
         for (int step = 0; step < n; step++) {
