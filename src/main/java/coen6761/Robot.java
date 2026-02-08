@@ -145,5 +145,6 @@ public class Robot {
                 floor[row][col] = 1;
             }
         }
+
     }
 }

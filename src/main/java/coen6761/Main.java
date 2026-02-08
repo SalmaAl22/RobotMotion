@@ -1,5 +1,7 @@
 package coen6761;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 //import main.java.coen6761.Robot;
@@ -12,6 +14,7 @@ public class Main {
         Robot robot = new Robot();
         Scanner scanner = new Scanner(System.in);
         boolean initialized = false;
+        List<String> history = new ArrayList<>();
 
         while (true) {
             System.out.print("Enter command: ");
@@ -47,6 +50,12 @@ public class Main {
                 continue;
             }
 
+            if (command != 'H' && command != 'Q') {
+
+                history.add(input);
+
+            }
+
             switch (command) {
                 case 'R':
                     robot.turnRight();
@@ -72,6 +81,21 @@ public class Main {
                     robot.paint();
                     break;
 
+                case 'H':
+                    if (history.isEmpty()) {
+                        System.out.println("No history to replay.");
+                        break;
+                    }
+
+                    System.out.println(
+                            "(Automated replay of the steps in history since the start of the program)");
+
+                    for (String past : history) {
+                        executeCommand(past, robot);
+                    }
+
+                    break;
+
                 case 'M':
                     try {
                         int n = Integer.parseInt(input.substring(1).trim());
@@ -89,5 +113,48 @@ public class Main {
 
         }
 
+    }
+
+    private static void executeCommand(String input, Robot robot) {
+
+        input = input.trim();
+        if (input.isEmpty())
+            return;
+
+        char command = Character.toUpperCase(input.charAt(0));
+
+        switch (command) {
+
+            case 'R':
+                robot.turnRight();
+                break;
+            case 'L':
+                robot.turnLeft();
+                break;
+            case 'U':
+                robot.penUp();
+                break;
+            case 'D':
+                robot.penDown();
+                break;
+            case 'C':
+                System.out.println(robot.getStatus());
+                break;
+            case 'P':
+                robot.paint();
+                break;
+
+            case 'M':
+                try {
+                    int n = Integer.parseInt(input.substring(1).trim());
+                    robot.moveForward(n);
+                } catch (Exception e) {
+                    System.out.println("Move error.");
+                }
+                break;
+
+            default:
+                System.out.println("Unknown command.");
+        }
     }
 }
