@@ -15,9 +15,13 @@ public class Robot {
         NORTH, EAST, SOUTH, WEST
     }
 
-    boolean penDown;
+    private boolean penDown;
 
     public void init(int n) {
+
+        if (n <= 0) {
+            throw new IllegalArgumentException("Size must be > 0");
+        }
 
         floor = new int[n][n];
         floorSize = n;
@@ -75,5 +79,67 @@ public class Robot {
 
     public void penUp() {
         penDown = false;
+    }
+
+    public void paint() {
+
+        int indexWidth = String.valueOf(floorSize - 1).length();
+        for (int r = floorSize - 1; r >= 0; r--) {
+            String label = String.valueOf(r);
+            System.out.print(label);
+            System.out.print(" ".repeat(indexWidth - label.length() + 1));
+            for (int c = 0; c < floorSize; c++) {
+                char mark = (floor[r][c] == 1) ? '*' : ' ';
+                System.out.print(mark);
+                System.out.print(" ".repeat(indexWidth));
+                System.out.print(" ");
+            }
+            System.out.println();
+        }
+
+        System.out.print(" ".repeat(indexWidth + 1));
+        for (int c = 0; c < floorSize; c++) {
+            String label = String.valueOf(c);
+            System.out.print(label);
+            System.out.print(" ".repeat(indexWidth - label.length() + 1));
+        }
+        System.out.println();
+    }
+
+    public void moveForward(int n) {
+        if (n < 0) {
+            throw new IllegalArgumentException("Steps must be >= 0");
+        }
+
+        int dRow = 0;
+        int dCol = 0;
+        switch (direction) {
+            case NORTH:
+                dRow = 1;
+                break;
+            case EAST:
+                dCol = 1;
+                break;
+            case SOUTH:
+                dRow = -1;
+                break;
+            case WEST:
+                dCol = -1;
+                break;
+        }
+
+        int targetRow = row + (dRow * n);
+        int targetCol = col + (dCol * n);
+        if (targetRow < 0 || targetRow >= floorSize || targetCol < 0 || targetCol >= floorSize) {
+            throw new IllegalArgumentException("Move would go out of bounds");
+        }
+
+        for (int step = 0; step < n; step++) {
+            row += dRow;
+            col += dCol;
+            if (penDown) {
+                floor[row][col] = 1;
+            }
+        }
     }
 }
