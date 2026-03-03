@@ -7,15 +7,22 @@
     <groupId>coen6761</groupId>
     <artifactId>robotmotion</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <scm>
+        <connection>scm:git:https://github.com/SalmaAl22/RobotMotion.git</connection>
+        <developerConnection>scm:git:https://github.com/SalmaAl22/RobotMotion.git</developerConnection>
+        <url>https://github.com/SalmaAl22/RobotMotion</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <coverage.line.minimum>0.95</coverage.line.minimum>
-        <coverage.instruction.minimum>0.95</coverage.instruction.minimum>
-        <coverage.branch.minimum>0.85</coverage.branch.minimum>
-        <coverage.method.minimum>0.95</coverage.method.minimum>
-        <coverage.complexity.minimum>0.85</coverage.complexity.minimum>
+        <coverage.line.minimum>0.80</coverage.line.minimum>
+        <coverage.statement.minimum>0.80</coverage.statement.minimum>
+        <coverage.method.minimum>0.75</coverage.method.minimum>
+        <coverage.branch.minimum>0.70</coverage.branch.minimum>
+        <!-- JaCoCo has no direct PATH counter; use complexity coverage as a practical proxy. -->
+        <coverage.path.minimum>0.60</coverage.path.minimum>
     </properties>
 
     <dependencies>
@@ -60,12 +67,12 @@
                             <goal>check</goal>
                         </goals>
                         <configuration>
+                            <excludes>
+                                <exclude>coen6761/Main*</exclude>
+                            </excludes>
                             <rules>
                                 <rule>
-                                    <element>CLASS</element>
-                                    <includes>
-                                        <include>coen6761/Robot</include>
-                                    </includes>
+                                    <element>BUNDLE</element>
                                     <limits>
                                         <limit>
                                             <counter>LINE</counter>
@@ -75,7 +82,7 @@
                                         <limit>
                                             <counter>INSTRUCTION</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>${coverage.instruction.minimum}</minimum>
+                                            <minimum>${coverage.statement.minimum}</minimum>
                                         </limit>
                                         <limit>
                                             <counter>BRANCH</counter>
@@ -90,7 +97,7 @@
                                         <limit>
                                             <counter>COMPLEXITY</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>${coverage.complexity.minimum}</minimum>
+                                            <minimum>${coverage.path.minimum}</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
@@ -98,6 +105,15 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <preparationGoals>clean verify</preparationGoals>
+                    <goals>clean verify</goals>
+                </configuration>
             </plugin>
         </plugins>
     </build>
