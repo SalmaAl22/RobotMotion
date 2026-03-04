@@ -242,4 +242,29 @@ class RobotTest {
         assertTrue(output.contains("*"));
         assertTrue(output.contains("0"));
     }
+    @Test
+void moveForward_outOfBounds_east_throws() {
+    Robot robot = new Robot();
+    robot.init(5);
+
+    robot.turnRight(); // facing east
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> robot.moveForward(5) // column >= floorSize
+    );
+}
+
+@Test
+void moveForward_outOfBounds_west_throws() {
+    Robot robot = new Robot();
+    robot.init(5);
+
+    robot.turnLeft(); // facing west
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> robot.moveForward(1) // column < 0
+    );
+}
 }
