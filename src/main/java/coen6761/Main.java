@@ -117,9 +117,9 @@ public class Main {
 
     private static void executeCommand(String input, Robot robot) {
 
-        input = input.trim();
-        if (input.isEmpty())
+        if (input == null || input.trim().isEmpty())
             return;
+        input = input.trim();
 
         char command = Character.toUpperCase(input.charAt(0));
 
